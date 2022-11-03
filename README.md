@@ -34,9 +34,9 @@ Develop a multiple regression model to find explanatory variables that can help 
 
 What you may try 
 
-•	You can include both numerical and categorical variables in the model
-•	You can create categorical variables based on the continuous variables, for example different income levels 
-•	You can try interaction models 
+*•	You can include both numerical and categorical variables in the model
+*•	You can create categorical variables based on the continuous variables, for example different income levels 
+*•	You can try interaction models 
 •	You can try second order models 
 •	You can even try interaction models that involve second order terms 
 
