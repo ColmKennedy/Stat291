@@ -1,0 +1,106 @@
+---
+title: "Final Project - EDA"
+author: "Colm Kennedy"
+date: "2022-11-03"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Libraries
+
+```{r}
+library(ggplot2)
+library(moderndive)
+
+all <- read.csv('all.csv')
+
+head(all)
+
+```
+
+# Exploratory Data Analysis
+
+### Population
+
+The populations are skewed right, meaning there are fewer high populations. Most populations lie between 4.6 million and 32 million. Population does not seem correlated with life expectancy, r = 0.05.
+
+```{r}
+summary(all$population)
+
+ggplot(data = all, mapping = aes(x = population)) +
+  geom_histogram(color = 'white') +
+  scale_x_continuous(labels = scales::comma)
+
+ggplot(data = all, mapping = aes(x = population, y = lifeexp)) + 
+  geom_point()+
+  geom_smooth(method = 'lm', se = FALSE)
+
+
+
+# Correlation
+get_correlation(all, formula = lifeexp ~ population)
+# very low corr life exp and pop
+```
+
+
+### Child Mortality ***
+
+Child mortality and life expectancy have an extremely high negative correlation, r = -0.91. The plot illustrates a strong linear relationship. This is a very good indicator of life expectancy, and a great candidate for our model.
+
+```{r}
+summary(all$childmort)
+
+ggplot(data = all, mapping = aes(x = childmort, y = lifeexp)) + 
+  geom_point()+
+  geom_smooth(method = 'lm', se = FALSE)
+
+get_correlation(all, formula = lifeexp ~ childmort)
+# Extremely strong correlation
+
+```
+
+
+### Income ***
+
+Income and life expectancy are also highly correlated, r = 0.72. The relationship appears logarithmic, applying log to income appears to make the relationship linear. This is another good candidate for our model.
+
+```{r}
+# Income
+
+summary(all$income)
+
+ggplot(data = all, mapping = aes(x = income, y = lifeexp)) + 
+  geom_point()+
+  geom_smooth(method = 'lm', se = FALSE)
+
+
+ggplot(data = all, mapping = aes(x = log(income), y = lifeexp)) + 
+  geom_point()+
+  geom_smooth(method = 'lm', se = FALSE)
+
+
+get_correlation(all, formula = lifeexp ~ income)
+# Strong correlation
+```
+
+### Income and Child Mortality
+
+Income and child mortality appear to have a relationship with each other and may be interacting. They are negatively correlated, r = -0.64. After applying log to income, the relationship appears much more linear. It would be worth trying an interaction model with income and child mortality. 
+
+```{r}
+ggplot(data = all, mapping = aes(x = income, y = childmort)) + 
+  geom_point()+
+  geom_smooth(method = 'lm', se = FALSE)
+
+
+ggplot(data = all, mapping = aes(x = log(income), y = childmort)) + 
+  geom_point()+
+  geom_smooth(method = 'lm', se = FALSE)
+
+get_correlation(all, formula = childmort ~ income)
+
+```
+
